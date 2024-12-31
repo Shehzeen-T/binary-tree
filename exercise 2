@@ -1,0 +1,43 @@
+#include <iostream>
+using namespace std;
+class TNode {
+public:
+ int data;
+ TNode* left;
+ TNode* right;
+ TNode(int val) : data(val), left(nullptr), right(nullptr) {}
+};
+int count_leaf(TNode* root) {
+ if (!root) return 0;
+ if (!root->left && !root->right) return 1;
+ return count_leaf(root->left) + count_leaf(root->right);
+}
+int count_nonleaf(TNode* root) {
+ if (!root || (!root->left && !root->right)) return 0;
+ return 1 + count_nonleaf(root->left) + count_nonleaf(root->right);
+}
+bool isleaf(TNode* root, int value) {
+ if (!root) return false;
+ if (root->data == value) return !root->left && !root->right;
+ return isleaf(root->left, value) || isleaf(root->right, value);
+}
+int main() {
+ // Example Tree
+ TNode* root = new TNode(14);
+ root->left = new TNode(4);
+ root->right = new TNode(15);
+ root->left->left = new TNode(3);
+ root->left->right = new TNode(9);
+ root->right->right = new TNode(18);
+ root->left->right->left = new TNode(7);
+ root->left->right->right = new TNode(9);
+ root->left->right->left->left = new TNode(5);
+ root->left->right->left->right = new TNode(5);
+ root->right->right->left = new TNode(16);
+ root->right->right->right = new TNode(20);
+ root->right->right->left->right = new TNode(17);
+ cout << "Leaf nodes: " << count_leaf(root) << endl;
+ cout << "Non-leaf nodes: " << count_nonleaf(root) << endl;
+ cout << "Is 5 a leaf? " << (isleaf(root, 5) ? "Yes" : "No") << endl;
+ return 0;
+}
